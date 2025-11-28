@@ -38,7 +38,7 @@ export default function Sidebar() {
           <nav className="space-y-1">
             <NavItem to="/" icon={Home} label="Dashboard" />
             <NavItem to="/hr" icon={Bot} label="HR Assistant" />
-            <NavItem to="/meeting" icon={Calendar} label="Meeting Scheduler" />
+            {/* <NavItem to="/meeting" icon={Calendar} label="Meeting Scheduler" /> */}
             <NavItem
               to="/support"
               icon={MessageCircle}

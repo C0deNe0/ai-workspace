@@ -1,9 +1,8 @@
-import { llm } from "../services/aiServices.js";
+import { generateAnswer } from "../services/aiServices.js";
 
 /**
- * Free + deployable: We won't call Google Calendar here.
- * Instead, we parse details and return a confirmation summary.
- * (Later you can add OAuth2 + Calendar API.)
+ * Free & deployable meeting agent.
+ * Instead of integrating Google Calendar, it just confirms scheduling info.
  */
 export async function scheduleMeeting({
   summary,
@@ -11,24 +10,23 @@ export async function scheduleMeeting({
   endTime,
   attendees = [],
 }) {
-  // quick validation
   if (!summary || !startTime || !endTime) {
     return { ok: false, message: "Missing summary/startTime/endTime" };
   }
 
-  // Normalize attendees
-  const emails = (attendees || []).filter(Boolean);
+  const attendeeList = attendees.filter(Boolean).join(", ") || "None";
 
-  // Optionally, ask LLM to produce a nice confirmation string
-  const resp = await llm.invoke([
-    { role: "system", content: "You format friendly meeting confirmations." },
-    {
-      role: "user",
-      content: `Create a short confirmation:\nTitle: ${summary}\nStart: ${startTime}\nEnd: ${endTime}\nAttendees: ${
-        emails.join(", ") || "none"
-      }`,
-    },
-  ]);
+  const message = await generateAnswer(`
+You are an assistant that formats friendly meeting confirmations.
+Given the following details, create a concise confirmation message:
 
-  return { ok: true, message: resp.content };
+Title: ${summary}
+Start: ${startTime}
+End: ${endTime}
+Attendees: ${attendeeList}
+
+Keep it short and professional.
+  `);
+
+  return { ok: true, message };
 }

@@ -1,10 +1,9 @@
 // src/services/vectorService.js
-import { embedder } from "./aiServices.js";
-import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+import { embedText } from "./aiServices.js";
 
 /**
  * Simple manual in-memory vector store implementation
- * (avoids all package export issues in new LangChain builds)
+ * (no LangChain dependencies)
  */
 
 const stores = {
@@ -21,7 +20,7 @@ export async function addDocumentsToStore({ name = "support", docs = [] }) {
   const store = await ensureStore(name);
 
   for (const doc of docs) {
-    const embedding = await embedder.embedQuery(doc.pageContent);
+    const embedding = await embedText(doc.pageContent);
     store.push({ text: doc.pageContent, embedding });
   }
 
@@ -33,7 +32,7 @@ export async function queryStore(name, query, k = 3) {
   const store = await ensureStore(name);
   if (store.length === 0) return [];
 
-  const queryEmbedding = await embedder.embedQuery(query);
+  const queryEmbedding = await embedText(query);
 
   const scored = store
     .map((item) => ({
@@ -53,11 +52,26 @@ function cosineSimilarity(a, b) {
   return dot / (normA * normB);
 }
 
-export async function splitDocs(rawDocs, opts = {}) {
-  const splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
-    chunkOverlap: 200,
-    ...opts,
-  });
-  return splitter.splitDocuments(rawDocs);
+/**
+ * Simple recursive text splitter — replaces LangChain’s RecursiveCharacterTextSplitter.
+ */
+export async function splitDocs(
+  rawDocs,
+  { chunkSize = 1000, chunkOverlap = 200 } = {}
+) {
+  const chunks = [];
+
+  for (const doc of rawDocs) {
+    const text = doc.pageContent;
+    let start = 0;
+
+    while (start < text.length) {
+      const end = Math.min(start + chunkSize, text.length);
+      const chunkText = text.slice(start, end);
+      chunks.push({ pageContent: chunkText, metadata: doc.metadata });
+      start += chunkSize - chunkOverlap;
+    }
+  }
+
+  return chunks;
 }

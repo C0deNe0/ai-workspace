@@ -28,12 +28,12 @@ export default function Dashboard() {
           emoji="🧍"
           desc="Ask about leave, benefits and company policies."
         />
-        <Card
+        {/* <Card
           to="/meeting"
           title="Meeting Scheduler"
           emoji="🗓️"
           desc="Schedule or manage meetings via Google Calendar."
-        />
+        /> */}
         <Card
           to="/support"
           title="Support Assistant"
