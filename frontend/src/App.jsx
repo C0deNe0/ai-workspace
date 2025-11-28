@@ -8,10 +8,10 @@ import Support from "./pages/Support.jsx";
 
 function App() {
   return (
-    <div>
-      <div>
+    <div className="app-shell">
+      <div className="flex min-h-screen">
         <Sidebar />
-        <main>
+        <main className="flex flex-1 flex-col">
           <Topbar />
           <div className=" p-6">
             <Routes>
