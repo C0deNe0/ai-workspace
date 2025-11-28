@@ -2,7 +2,7 @@ import {
   ensureStore,
   splitDocs,
   addDocumentsToStore,
-  queryStore,
+  //   queryStore,
 } from "../services/vectorService.js";
 import { generateAnswer } from "../services/aiServices.js";
 
@@ -15,7 +15,6 @@ export async function uploadSupportDocs(langchainDocs) {
   console.log(`📄 Added ${chunks.length} chunks to support store`);
   return { added: chunks.length };
 }
-
 
 export async function askSupport(question) {
   const store = await ensureStore("support");

@@ -1,27 +1,35 @@
 // src/utils/pdfLoader.js
-import fs from "node:fs/promises";
-import { createRequire } from "module";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 
-// ✅ Use createRequire to import a CommonJS module in ESM
-const require = createRequire(import.meta.url);
-const pdfParse = require("pdf-parse");
+// ✅ FIX: Use simple default import for pdf-ts (CommonJS module)
+import PDFLoader from "pdf-ts";
 
 /**
- * Load a PDF and return it as an array of "documents"
+ * Loads a PDF file and returns its content as a "document" array.
  */
 export async function loadPdf(filePath) {
   try {
-    const buffer = await fs.readFile(filePath);
-    const data = await pdfParse(buffer);
+    // Use readFileSync because pdf-ts expects a Buffer or ArrayBuffer
+    const buffer = readFileSync(filePath);
+
+    // Load the PDF using the class/function imported as PDFLoader
+    const pdf = await PDFLoader.load(buffer);
+
+    // Extract all text content
+    const text = await pdf.extractText();
+
+    // Join page contents into a single text block for subsequent chunking
+    const fullText = Array.isArray(text) ? text.join("\n\n") : text;
 
     return [
       {
-        pageContent: data.text,
-        metadata: { source: filePath },
+        pageContent: fullText.trim(),
+        metadata: { source: path.basename(filePath) },
       },
     ];
   } catch (err) {
-    console.error("❌ PDF load error:", err.message);
-    return [];
+    console.error(`❌ PDF load error for ${filePath}:`, err.message);
+    throw new Error(`Failed to load PDF using pdf-ts: ${err.message}`);
   }
 }

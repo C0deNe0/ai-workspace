@@ -1,45 +1,58 @@
 // src/services/aiServices.js
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import "dotenv/config"; // Ensure dotenv is loaded if using environment variables
 
 if (!process.env.GOOGLE_API_KEY) {
-  console.error("❌ GOOGLE_API_KEY missing!");
+  console.error(
+    "❌ GOOGLE_API_KEY missing! Set GOOGLE_API_KEY in your .env file."
+  );
   process.exit(1);
 }
 
-// ✅ Use new stable endpoint
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
-console.log("✅ Google Generative AI connected to model: gemini-2.5pro");
+// 1. Model for complex reasoning (RAG context understanding)
+const LLM_MODEL = "gemini-2.5-pro";
+const llm = genAI.getGenerativeModel({ model: LLM_MODEL });
 
+// 2. Dedicated model for generating embeddings (for RAG search)
+const EMBEDDING_MODEL = "embedding-001";
+const embeddingModel = genAI.getGenerativeModel({ model: EMBEDDING_MODEL });
+
+console.log(
+  `✅ Google Generative AI connected to LLM: ${LLM_MODEL} and Embedder: ${EMBEDDING_MODEL}`
+);
+
+/**
+ * Generates an answer using the main LLM.
+ * @param {string} prompt - The prompt or instruction for the LLM.
+ * @returns {Promise<string>} The generated text response.
+ */
 export async function generateAnswer(prompt) {
   try {
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
-    return text || "⚠️ No text generated.";
+    const result = await llm.generateContent(prompt);
+    const text = result.response.text().trim();
+    return text || "⚠️ No text generated. Please try rephrasing your question.";
   } catch (err) {
     console.error("❌ Gemini API Error:", err.message);
-    throw err;
+    throw new Error("Failed to generate response from AI model.");
   }
 }
 
-export const llm = {
-  invoke: async (messages) => {
-    const prompt = messages
-      .map((m) => `${m.role.toUpperCase()}: ${m.content}`)
-      .join("\n");
-    const content = await generateAnswer(prompt);
-    return { content };
-  },
+/**
+ * Generates an embedding (vector) for a given piece of text.
+ * @param {string} text - The text to embed.
+ * @returns {Promise<number[]>} The embedding vector.
+ */
+export const embedText = async (text) => {
+  try {
+    const response = await embeddingModel.embedContent({ content: text });
+    return response.embedding.values;
+  } catch (err) {
+    console.error("❌ Gemini Embedding API Error:", err.message);
+    throw new Error("Failed to generate embedding for RAG.");
+  }
 };
 
-// Simple embedding stub (for in-memory store)
-export const embedText = async (text) => {
-  const words = text.split(/\s+/);
-  const vector = new Array(512).fill(0);
-  for (let i = 0; i < words.length; i++) {
-    const index = i % 512;
-    vector[index] += words[i].length * 0.01;
-  }
-  return vector;
-};
+// ... (Your llm and embedText exports for compatibility, if needed)
+// For a cleaner agent, the above exported functions are sufficient.
