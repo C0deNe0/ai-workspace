@@ -7,8 +7,8 @@ import Toast from "../components/Toast.jsx";
 export default function Support() {
   const [file, setFile] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false); // For chat
-  const [uploading, setUploading] = useState(false); // For upload
+  const [loading, setLoading] = useState(false); // Chat loading
+  const [uploading, setUploading] = useState(false); // Upload loading
   const [toast, setToast] = useState("");
 
   const chatEndRef = useRef(null);
@@ -60,60 +60,82 @@ export default function Support() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-4xl mx-auto py-10 px-4 transition-colors duration-500">
       {/* Header + Upload */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
-          <h2 className="text-2xl font-semibold">🧩 Support Assistant</h2>
+          <h2 className="text-4xl font-bold mb-1 text-gray-900 dark:text-white">
+            <span className="text-red-600"> Support</span> Assistant
+          </h2>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Upload support or FAQ PDFs, then ask context-aware questions.
+            Upload your documentation or FAQs, then ask smart, context-aware
+            questions.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center border rounded-2xl p-3 border-red-300 gap-3">
           <input
             type="file"
             accept="application/pdf"
             onChange={(e) => setFile(e.target.files[0])}
             disabled={uploading}
+            className="text-xs file:mr-2 file:px-3 file:py-1 file:rounded-md file:border-0 file:bg-red-600 file:text-white hover:file:bg-red-700 transition cursor-pointer"
           />
           <button
             onClick={upload}
-            className="btn btn-primary px-4 py-1 rounded-md"
             disabled={uploading}
+            className="px-4 py-2 rounded-md font-medium bg-red-600 hover:bg-red-700 text-white transition disabled:opacity-60"
           >
-            {uploading ? "⏳ Uploading..." : "📤 Upload"}
+            {uploading ? "⏳ Uploading..." : " Upload"}
           </button>
         </div>
       </div>
 
-      {/* File info */}
+      {/* File Info */}
       {file && (
-        <p className="text-xs text-gray-500 mb-2">
-          Selected file: <strong>{file.name}</strong>
+        <p className="text-xs text-gray-500 mb-3">
+          Selected file:{" "}
+          <strong className="text-red-600 dark:text-red-400">
+            {file.name}
+          </strong>
         </p>
       )}
 
       {/* Chat Box */}
-      <div className="card p-4 mb-4 min-h-[300px] max-h-[500px] overflow-y-auto border rounded-lg bg-white/70 dark:bg-gray-900/40">
+      <div className="relative rounded-3xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gradient-to-br dark:from-gray-950 dark:to-gray-900 backdrop-blur-lg p-6 shadow-lg hover:shadow-red-500/10 transition-all duration-500 overflow-hidden min-h-[320px] max-h-[500px] overflow-y-auto">
+        {/* red gradient overlay */}
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-br from-red-600/5 via-transparent to-transparent opacity-80 rounded-3xl"></div>
+
         {messages.length === 0 && (
-          <p className="text-sm text-gray-500">
-            Start by uploading a document, then ask a question…
-          </p>
+          <div className="text-center text-gray-500 dark:text-gray-400 text-sm py-10">
+            🚀 Start by uploading a PDF, then ask a question!
+          </div>
         )}
-        {messages.map((m, i) => (
-          <ChatBubble key={i} role={m.role} text={m.text} />
-        ))}
-        {loading && <p className="text-sm text-blue-500">🤖 Thinking...</p>}
-        <div ref={chatEndRef} />
+
+        <div className="space-y-5 relative z-10">
+          {messages.map((m, i) => (
+            <ChatBubble key={i} role={m.role} text={m.text} />
+          ))}
+
+          {loading && (
+            <div className="flex justify-start items-center space-x-2 text-gray-500 dark:text-gray-400">
+              <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-sm">AI Assistant is thinking...</p>
+            </div>
+          )}
+
+          <div ref={chatEndRef} />
+        </div>
       </div>
 
       {/* Input */}
-      <ChatInput
-        placeholder="Ask something about your uploaded document..."
-        onSend={ask}
-        disabled={loading}
-      />
+      <div className="mt-8">
+        <ChatInput
+          placeholder="Ask something about your uploaded document..."
+          onSend={ask}
+          disabled={loading}
+        />
+      </div>
 
       {/* Toast */}
       <Toast message={toast} />

@@ -15,7 +15,7 @@ const NavItem = ({ to, icon: Icon, label }) => {
         }`}
       >
         <Icon size={18} />
-        <span className="text-sm font-medium">{label}</span>
+        <span className="text-md font-medium">{label}</span>
       </div>
       {active && (
         <motion.div
@@ -32,7 +32,7 @@ export default function Sidebar() {
     <aside className="hidden md:block w-[260px] border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4">
       <div className="space-y-6">
         <div>
-          <div className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
+          <div className="text-md uppercase font-bold mt-7 mb-7   tracking-wider text-gray-500 dark:text-gray-400 ">
             Navigation
           </div>
           <nav className="space-y-1">
