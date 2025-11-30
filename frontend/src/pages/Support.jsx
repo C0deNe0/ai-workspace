@@ -86,7 +86,7 @@ export default function Support() {
             disabled={uploading}
             className="px-4 py-2 rounded-md font-medium bg-red-600 hover:bg-red-700 text-white transition disabled:opacity-60"
           >
-            {uploading ? "⏳ Uploading..." : " Upload"}
+            {uploading ? " Uploading..." : " Upload"}
           </button>
         </div>
       </div>
