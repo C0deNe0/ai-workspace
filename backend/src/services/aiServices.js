@@ -1,58 +1,83 @@
 // src/services/aiServices.js
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import "dotenv/config"; // Ensure dotenv is loaded if using environment variables
+import { VoyageAIClient, VoyageAIError } from "voyageai";
+import "dotenv/config";
 
+/**
+ * =========================================
+ *  INITIALIZATION
+ * =========================================
+ */
 if (!process.env.GOOGLE_API_KEY) {
-  console.error(
-    "❌ GOOGLE_API_KEY missing! Set GOOGLE_API_KEY in your .env file."
-  );
+  console.error(" Missing GOOGLE_API_KEY in .env file.");
   process.exit(1);
 }
 
+if (!process.env.VOYAGE_API_KEY) {
+  console.error(" Missing VOYAGE_API_KEY in .env file.");
+  process.exit(1);
+}
+
+
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+const llm = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
-// 1. Model for complex reasoning (RAG context understanding)
-const LLM_MODEL = "gemini-2.5-pro";
-const llm = genAI.getGenerativeModel({ model: LLM_MODEL });
+const voyage = new VoyageAIClient({
+  apiKey: process.env.VOYAGE_API_KEY,
+});
 
-// 2. Dedicated model for generating embeddings (for RAG search)
-const EMBEDDING_MODEL = "embedding-001";
-const embeddingModel = genAI.getGenerativeModel({ model: EMBEDDING_MODEL });
-
-console.log(
-  `✅ Google Generative AI connected to LLM: ${LLM_MODEL} and Embedder: ${EMBEDDING_MODEL}`
-);
+console.log("✅ Google Gemini connected (gemini-2.5-pro)");
+console.log("✅ VoyageAIClient connected for embeddings");
 
 /**
- * Generates an answer using the main LLM.
- * @param {string} prompt - The prompt or instruction for the LLM.
- * @returns {Promise<string>} The generated text response.
+ * =========================================
+ *  TEXT GENERATION (Gemini)
+ * =========================================
  */
 export async function generateAnswer(prompt) {
   try {
+    if (!prompt?.trim()) throw new Error("Prompt is empty.");
     const result = await llm.generateContent(prompt);
-    const text = result.response.text().trim();
-    return text || "⚠️ No text generated. Please try rephrasing your question.";
+    const text = result?.response?.text()?.trim();
+    return text || "⚠️ No response generated. Please try again.";
   } catch (err) {
-    console.error("❌ Gemini API Error:", err.message);
-    throw new Error("Failed to generate response from AI model.");
+    console.error("❌ Gemini LLM Error:", err.message);
+    throw new Error("AI model failed to generate an answer.");
   }
 }
 
 /**
- * Generates an embedding (vector) for a given piece of text.
- * @param {string} text - The text to embed.
- * @returns {Promise<number[]>} The embedding vector.
+ * =========================================
+ *  EMBEDDING GENERATION (VoyageAI SDK)
+ * =========================================
  */
-export const embedText = async (text) => {
-  try {
-    const response = await embeddingModel.embedContent({ content: text });
-    return response.embedding.values;
-  } catch (err) {
-    console.error("❌ Gemini Embedding API Error:", err.message);
-    throw new Error("Failed to generate embedding for RAG.");
-  }
-};
+export async function embedText(text) {
+  const cleanText = (text || "")
+    .replace(/[\r\n]+/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
 
-// ... (Your llm and embedText exports for compatibility, if needed)
-// For a cleaner agent, the above exported functions are sufficient.
+  if (!cleanText) throw new Error("Empty text provided for embedding.");
+
+  try {
+    const response = await voyage.embed({
+      input: cleanText,
+      model: "voyage-large-2-instruct", 
+      maxRetries: 2,
+      timeoutInSeconds: 60,
+    });
+
+    if (!response?.data?.[0]?.embedding) {
+      throw new Error("Invalid embedding response from VoyageAI.");
+    }
+
+    return response.data[0].embedding;
+  } catch (err) {
+    if (err instanceof VoyageAIError) {
+      console.error("❌ VoyageAI API Error:", err.statusCode, err.message);
+    } else {
+      console.error("❌ VoyageAI Error:", err.message);
+    }
+    throw new Error("Failed to generate embedding via VoyageAI.");
+  }
+}

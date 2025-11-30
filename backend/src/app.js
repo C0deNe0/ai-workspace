@@ -23,6 +23,7 @@ app.use("/support", supportRouter);
 app.use("/meeting", meetingRouter);
 
 app.use(errorHandler);
-
-const PORT = process.env.PORT ?? 5000;
-app.listen(PORT, () => console.log(`backend server listning on ${PORT}`));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`✅ Server running at http://localhost:${PORT}`);
+});

@@ -1,5 +1,112 @@
-Policy Section,Sample Text to Include
-Annual Leave (Vacation),"Policy: All full-time employees are entitled to 20 days of paid annual leave per calendar year. Leave accrues monthly. Employees must submit a request via the HR portal at least two weeks in advance. Unused leave can be rolled over, up to a maximum of 5 days."
-Sick Leave,"Policy: Employees receive 10 days of paid sick leave per year. For absences exceeding three consecutive days, a doctor's note must be provided to the HR department. Sick leave does not roll over to the next year."
-Work From Home (WFH),"Policy: Flexible work arrangements, including WFH, are permitted two days per week, subject to manager approval and team scheduling needs. Employees must maintain adequate internet connection and be available during core hours (10 AM - 4 PM IST)."
-Performance Review,"Policy: Formal performance reviews are conducted semi-annually, in June and December. Goals are set in January. Raises and bonuses are typically determined following the December review."
+TechNova Solutions Pvt. Ltd. — Employee Policy Handbook
+Updated: November 2025
+
+------------------------------------------------------------
+1. Annual Leave (Vacation)
+------------------------------------------------------------
+All full-time employees are entitled to 20 days of paid annual leave per calendar year. 
+Leave accrues monthly and must be requested at least two weeks in advance through the HR portal. 
+Unused annual leave can be carried forward up to a maximum of 5 days into the next year. 
+Public holidays do not count toward annual leave days.
+
+------------------------------------------------------------
+2. Sick Leave
+------------------------------------------------------------
+Employees are entitled to 10 days of paid sick leave each year. 
+If an employee is unwell for more than 3 consecutive days, they must provide a medical certificate. 
+Unused sick leave cannot be carried forward to the next year. 
+Repeated misuse of sick leave may result in disciplinary action.
+
+------------------------------------------------------------
+3. Casual Leave
+------------------------------------------------------------
+Employees receive 6 days of paid casual leave per calendar year. 
+Casual leave is meant for short-term personal matters, emergencies, or family obligations. 
+It must be applied for at least 1 day in advance unless in urgent situations. 
+Casual leave cannot be combined with annual leave.
+
+------------------------------------------------------------
+4. Work From Home (WFH) Policy
+------------------------------------------------------------
+Employees may work from home up to 2 days per week, subject to manager approval. 
+WFH requests should be logged in the HR system at least 1 day before the planned remote day. 
+Employees must ensure a stable internet connection and be available during core hours (10 AM – 4 PM IST). 
+Performance during WFH is evaluated the same as in-office work.
+
+------------------------------------------------------------
+5. Working Hours and Attendance
+------------------------------------------------------------
+Standard office hours are 9:00 AM to 6:00 PM IST, Monday to Friday, with a 1-hour lunch break. 
+All employees must mark attendance daily using the company’s biometric or digital attendance system. 
+Late arrivals beyond 15 minutes three times in a month may result in half-day deductions unless approved by the manager.
+
+------------------------------------------------------------
+6. Performance Review
+------------------------------------------------------------
+Formal performance reviews are conducted twice a year — in June and December. 
+Each employee’s goals and KPIs are set in January. 
+Raises, promotions, and bonuses are determined based on the December review outcomes. 
+Continuous feedback from managers is encouraged throughout the year.
+
+------------------------------------------------------------
+7. Code of Conduct
+------------------------------------------------------------
+Employees are expected to maintain professionalism, integrity, and respect toward colleagues. 
+Discrimination, harassment, or bullying of any kind is not tolerated. 
+Violation of these rules may lead to disciplinary action, including termination.
+
+------------------------------------------------------------
+8. Dress Code
+------------------------------------------------------------
+TechNova maintains a business-casual dress code policy. 
+Employees should dress appropriately for client meetings and external interactions. 
+Casual Fridays allow jeans and T-shirts, provided they are neat and presentable.
+
+------------------------------------------------------------
+9. Probation and Confirmation
+------------------------------------------------------------
+All new hires are placed on a 3-month probation period. 
+Upon satisfactory performance and conduct, they receive a confirmation letter from HR. 
+If performance during probation is unsatisfactory, the probation period may be extended or employment terminated.
+
+------------------------------------------------------------
+10. Notice Period
+------------------------------------------------------------
+Employees who wish to resign must provide a 30-day written notice. 
+During the notice period, employees are expected to complete handover responsibilities. 
+HR may waive or adjust the notice period based on project needs.
+
+------------------------------------------------------------
+11. Employee Benefits
+------------------------------------------------------------
+- Health insurance coverage for employees and immediate family members.
+- Provident Fund contributions as per statutory norms.
+- Annual performance-based bonuses.
+- Paid maternity (26 weeks) and paternity (10 days) leave.
+- Learning & development reimbursements up to ₹15,000 annually.
+
+------------------------------------------------------------
+12. Disciplinary Action
+------------------------------------------------------------
+HR reserves the right to take appropriate action in cases of:
+- Violation of company policies.
+- Breach of confidentiality.
+- Misconduct, harassment, or discrimination.
+- Unauthorized absences.
+
+------------------------------------------------------------
+13. IT and Security Policy
+------------------------------------------------------------
+Employees must not install unauthorized software or share company data externally. 
+Company laptops and credentials are to be used strictly for work-related activities. 
+In case of data breach or device loss, employees must inform the IT department immediately.
+
+------------------------------------------------------------
+14. Grievance Redressal
+------------------------------------------------------------
+Employees can report workplace concerns confidentially to the HR department at hr@technova.in. 
+The HR team is responsible for ensuring fair investigation and resolution within 10 business days.
+
+------------------------------------------------------------
+End of Document
+------------------------------------------------------------

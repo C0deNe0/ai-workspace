@@ -37,7 +37,12 @@ export default function HR() {
         {messages.map((m, i) => (
           <ChatBubble key={i} role={m.role} text={m.text} />
         ))}
-        {loading && "..."}
+        {loading && (
+          <div className="flex justify-start items-center space-x-2">
+            <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-sm text-gray-500">HR Assistant is typing...</p>
+          </div>
+        )}
       </div>
 
       <ChatInput placeholder="Ask HR..." onSend={send} disabled={loading} />
